@@ -1,0 +1,25 @@
+project_id = "the-pooja-house"
+
+[auth.email]
+otp_length = 6
+otp_expiry = 3600
+
+[auth.email.template.confirmation]
+subject = "Your The Pooja House verification code"
+content_path = "./supabase/templates/confirmation.html"
+
+[auth.email.template.magic_link]
+subject = "Your The Pooja House login code"
+content_path = "./supabase/templates/magic-link.html"
+
+[functions.create-cod-order]
+verify_jwt = true
+
+[functions.track-order]
+verify_jwt = false
+
+[functions.download-invoice]
+verify_jwt = false
+
+[functions.process-invoice-deliveries]
+verify_jwt = false

@@ -1,0 +1,10 @@
+{
+  "files": [],
+  "references": [
+    { "path": "./packages/database-types" },
+    { "path": "./packages/shared-validation" },
+    { "path": "./packages/shared-utils" },
+    { "path": "./apps/customer" },
+    { "path": "./apps/admin" }
+  ]
+}

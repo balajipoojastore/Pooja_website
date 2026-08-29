@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="The Pooja House is a mobile-first pooja quick-commerce store for idols, diyas, agarbatti, brass items, kumkum, rudraksha, pooja kits, and temple decor.">
+  <title>The Pooja House | Pooja Essentials Delivered Fast</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=Hind:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body data-shop="The Pooja House">
+  <div id="loader" class="app-loader" aria-label="Loading">
+    <div class="loader-shell">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+
+  <div id="pinGate" class="pin-gate" role="dialog" aria-modal="true" aria-labelledby="pinTitle">
+    <div class="pin-card">
+      <span class="brand-mark">P</span>
+      <p class="label">Delivery check</p>
+      <h1 id="pinTitle">Pooja essentials at your doorstep</h1>
+      <p>Enter your PIN code to see same-day delivery availability.</p>
+      <form id="pinForm" class="pin-form" novalidate>
+        <label class="sr-only" for="pinInput">6-digit PIN code</label>
+        <input id="pinInput" type="text" inputmode="numeric" maxlength="6" placeholder="560087" autocomplete="postal-code">
+        <button class="primary-btn" type="submit">Check delivery</button>
+      </form>
+      <p id="pinMsg" class="pin-msg" role="status" aria-live="polite"></p>
+      <small>Demo PINs: 560087, 560066, 560037</small>
+    </div>
+  </div>
+
+  <header id="siteHeader" class="site-header">
+    <div class="top-row">
+      <a class="brand" href="#" aria-label="The Pooja House home">
+        <span class="brand-mark">P</span>
+        <span>
+          <strong>The Pooja House</strong>
+          <small>Spiritual quick store</small>
+        </span>
+      </a>
+      <button id="deliverBadge" class="location-pill" type="button" hidden aria-label="Change delivery PIN">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s7-5.1 7-11a7 7 0 1 0-14 0c0 5.9 7 11 7 11Z"/><path d="M12 10.5h.01"/></svg>
+        <span id="deliverPin"></span>
+      </button>
+      <button id="headerCartBtn" class="icon-btn cart-icon" type="button" aria-label="Open cart">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6h15l-1.5 8.5a2 2 0 0 1-2 1.6H8.2a2 2 0 0 1-2-1.7L5 3H2"/><path d="M9 21h.01M18 21h.01"/></svg>
+        <span id="headerCartCount">0</span>
+      </button>
+      <button class="icon-btn profile-btn" type="button" aria-label="Profile">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 21a8 8 0 0 0-16 0"/><path d="M16 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0Z"/></svg>
+      </button>
+    </div>
+    <form class="search-box" role="search">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m21 21-4.2-4.2"/><path d="M11 18a7 7 0 1 1 0-14 7 7 0 0 1 0 14Z"/></svg>
+      <label class="sr-only" for="searchInput">Search products</label>
+      <input id="searchInput" type="search" placeholder="Search diyas, agarbatti, pooja kits">
+      <button id="voiceBtn" type="button" aria-label="Voice search">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 14a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v5a3 3 0 0 0 3 3Z"/><path d="M19 11a7 7 0 0 1-14 0"/><path d="M12 18v3"/></svg>
+      </button>
+    </form>
+    <div class="suggestions" aria-label="Search suggestions">
+      <button type="button" data-suggest="diya">Diyas</button>
+      <button type="button" data-suggest="incense">Incense</button>
+      <button type="button" data-suggest="pooja kit">Pooja kit</button>
+      <button type="button" data-suggest="brass">Brass</button>
+    </div>
+  </header>
+
+  <main id="home" class="app-main">
+    <section class="hero-strip">
+      <div class="devotional-marquee" aria-label="Devotional mantras in Kannada and English"><div class="devotional-marquee__track" aria-hidden="true"><div class="devotional-marquee__group"><span class="devotional-marquee__item"><b lang="kn">ಓಂ ನಮಃ ಶಿವಾಯ</b><span class="devotional-marquee__translation" lang="en">Om Namah Shivaya</span><i>✦</i></span><span class="devotional-marquee__item"><b lang="kn">ಓಂ ಗಂ ಗಣಪತಯೇ ನಮಃ</b><span class="devotional-marquee__translation" lang="en">Om Gam Ganapataye Namaha</span><i>✦</i></span><span class="devotional-marquee__item"><b lang="kn">ಓಂ ಶ್ರೀ ಮಹಾಲಕ್ಷ್ಮ್ಯೈ ನಮಃ</b><span class="devotional-marquee__translation" lang="en">Om Shri Mahalakshmyai Namaha</span><i>✦</i></span><span class="devotional-marquee__item"><b lang="kn">ಶುಭಂ ಕರೋತಿ ಕಲ್ಯಾಣಂ</b><span class="devotional-marquee__translation" lang="en">Shubham Karoti Kalyanam</span><i>✦</i></span><span class="devotional-marquee__item"><b lang="kn">ಕನಿಷ್ಠ ಆರ್ಡರ್ ₹599</b><span class="devotional-marquee__translation" lang="en">Minimum order ₹599</span><i>✦</i></span></div><div class="devotional-marquee__group"><span class="devotional-marquee__item"><b lang="kn">ಓಂ ನಮಃ ಶಿವಾಯ</b><span class="devotional-marquee__translation" lang="en">Om Namah Shivaya</span><i>✦</i></span><span class="devotional-marquee__item"><b lang="kn">ಓಂ ಗಂ ಗಣಪತಯೇ ನಮಃ</b><span class="devotional-marquee__translation" lang="en">Om Gam Ganapataye Namaha</span><i>✦</i></span><span class="devotional-marquee__item"><b lang="kn">ಓಂ ಶ್ರೀ ಮಹಾಲಕ್ಷ್ಮ್ಯೈ ನಮಃ</b><span class="devotional-marquee__translation" lang="en">Om Shri Mahalakshmyai Namaha</span><i>✦</i></span><span class="devotional-marquee__item"><b lang="kn">ಶುಭಂ ಕರೋತಿ ಕಲ್ಯಾಣಂ</b><span class="devotional-marquee__translation" lang="en">Shubham Karoti Kalyanam</span><i>✦</i></span><span class="devotional-marquee__item"><b lang="kn">ಕನಿಷ್ಠ ಆರ್ಡರ್ ₹599</b><span class="devotional-marquee__translation" lang="en">Minimum order ₹599</span><i>✦</i></span></div></div></div>
+      <div id="promoSlider" class="promo-slider" aria-label="Promotional banners"></div>
+      <div id="promoDots" class="promo-dots" aria-hidden="true"></div>
+    </section>
+
+    <section id="categories" class="app-section">
+      <div class="section-title">
+        <h2>Shop by category</h2>
+        <a href="#allProducts">View all</a>
+      </div>
+      <div id="categoryGrid" class="category-rail"></div>
+    </section>
+
+    <section id="popular" class="app-section">
+      <div class="section-title">
+        <h2>Popular products</h2>
+        <a href="#allProducts">See all</a>
+      </div>
+      <div id="popularGrid" class="product-rail"></div>
+    </section>
+
+    <section id="festival" class="app-section">
+      <div class="section-title">
+        <h2>Festival collection</h2>
+        <a href="#allProducts">Explore</a>
+      </div>
+      <div class="festival-card">
+        <div>
+          <span class="label">Limited offer</span>
+          <h2>Complete Lakshmi Pooja Kit</h2>
+          <p>Ready-to-use essentials for family rituals.</p>
+          <button class="primary-btn" type="button" data-buy="hamper">Buy kit</button>
+        </div>
+        <img src="https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?auto=format&fit=crop&w=720&q=72" alt="Festival pooja kit with spiritual essentials" loading="lazy" data-ph="kit">
+      </div>
+    </section>
+
+    <section id="bestSellers" class="app-section">
+      <div class="section-title">
+        <h2>Best sellers</h2>
+        <a href="#allProducts">See all</a>
+      </div>
+      <div id="bestSellerGrid" class="product-rail"></div>
+    </section>
+
+    <section id="recommended" class="app-section">
+      <div class="section-title">
+        <h2>Recommended for you</h2>
+        <a href="#allProducts">More</a>
+      </div>
+      <div id="recommendedGrid" class="product-rail"></div>
+    </section>
+
+    <section id="recent" class="app-section">
+      <div class="section-title">
+        <h2>Recently viewed</h2>
+        <a href="#popular">Refresh</a>
+      </div>
+      <div id="recentGrid" class="product-rail"></div>
+    </section>
+
+    <section id="allProducts" class="app-section">
+      <div class="section-title">
+        <h2>All essentials</h2>
+        <span id="resultCount">0 items</span>
+      </div>
+      <div id="productGrid" class="product-grid"></div>
+    </section>
+
+    <section id="reviews" class="app-section">
+      <div class="section-title">
+        <h2>Customer reviews</h2>
+        <a href="#home">Top</a>
+      </div>
+      <div class="review-rail">
+        <article class="review-card">
+          <strong>4.9/5</strong>
+          <p>Fresh products and delivery before evening aarti.</p>
+          <small>Priya S.</small>
+        </article>
+        <article class="review-card">
+          <strong>5.0/5</strong>
+          <p>The festival kit had everything packed neatly.</p>
+          <small>Raghav M.</small>
+        </article>
+        <article class="review-card">
+          <strong>4.8/5</strong>
+          <p>Simple shopping flow and reliable WhatsApp checkout.</p>
+          <small>Ananya K.</small>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer id="contact" class="site-footer">
+    <div>
+      <h2>The Pooja House</h2>
+      <p>Premium spiritual essentials delivered with care.</p>
+    </div>
+    <div class="footer-links">
+      <a href="#categories">Categories</a>
+      <a href="#allProducts">Products</a>
+      <a href="#reviews">Reviews</a>
+      <a href="#">Support</a>
+    </div>
+    <p class="fine">Copyright 2026 The Pooja House. Demo pricing and imagery.</p>
+  </footer>
+
+  <div id="cartOverlay" class="cart-overlay"></div>
+
+  <button id="cartBar" class="cart-bar" type="button" aria-label="Open basket">
+    <span><b id="cartQty">0 items</b><small id="cartTotal">Rs. 0</small></span>
+    <strong>View cart</strong>
+  </button>
+
+  <aside id="cartDrawer" class="cart-drawer" aria-hidden="true" aria-label="Your cart">
+    <header class="drawer-top">
+      <div>
+        <h2>Your cart</h2>
+        <p>Review items before WhatsApp checkout.</p>
+      </div>
+      <button id="closeDrawer" class="round-btn" type="button" aria-label="Close cart">&times;</button>
+    </header>
+    <div id="drawerItems" class="drawer-items"></div>
+    <div class="coupon-box">
+      <label for="couponInput">Coupon</label>
+      <div>
+        <input id="couponInput" type="text" placeholder="POOJA10">
+        <button type="button">Apply</button>
+      </div>
+    </div>
+    <footer class="drawer-bottom">
+      <div class="price-line"><span>Subtotal</span><strong id="drawerSubtotal">Rs. 0</strong></div>
+      <div class="price-line"><span>Delivery</span><strong class="success">Free</strong></div>
+      <div class="price-line total"><span>Total</span><strong id="drawerTotal">Rs. 0</strong></div>
+      <button id="whatsappBtn" class="checkout-btn" type="button">Checkout on WhatsApp</button>
+    </footer>
+  </aside>
+
+  <div id="quickView" class="quick-view" aria-hidden="true">
+    <article class="quick-sheet" role="dialog" aria-modal="true" aria-labelledby="quickTitle">
+      <button id="quickClose" class="round-btn" type="button" aria-label="Close product view">&times;</button>
+      <div id="quickContent"></div>
+    </article>
+  </div>
+
+  <nav class="bottom-nav" aria-label="Mobile navigation">
+    <a href="#home" class="active">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11 12 4l9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1Z"/></svg>
+      <span>Home</span>
+    </a>
+    <a href="#categories">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h7v7H4ZM13 4h7v7h-7ZM4 13h7v7H4ZM13 13h7v7h-7Z"/></svg>
+      <span>Categories</span>
+    </a>
+    <a href="#siteHeader">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m21 21-4.2-4.2"/><path d="M11 18a7 7 0 1 1 0-14 7 7 0 0 1 0 14Z"/></svg>
+      <span>Search</span>
+    </a>
+    <button id="bottomCartBtn" type="button">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6h15l-1.5 8.5a2 2 0 0 1-2 1.6H8.2a2 2 0 0 1-2-1.7L5 3H2"/><path d="M9 21h.01M18 21h.01"/></svg>
+      <span>Cart</span>
+      <b id="bottomCartCount">0</b>
+    </button>
+    <a href="#contact">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 21a8 8 0 0 0-16 0"/><path d="M16 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0Z"/></svg>
+      <span>Profile</span>
+    </a>
+  </nav>
+
+  <a id="whatsappFloat" class="whatsapp-float" href="#" aria-label="Chat on WhatsApp">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.5 14.4c-.3-.1-1.7-.8-2-.9-.3-.1-.5-.1-.7.2-.2.3-.7.9-.9 1.1-.2.2-.3.2-.6.1a8 8 0 0 1-2.4-1.5 9 9 0 0 1-1.6-2c-.2-.3 0-.5.1-.6l.4-.5.3-.5c.1-.2 0-.4 0-.5l-.9-2.1c-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.4s1 2.8 1.2 3c.1.2 2 3.1 4.9 4.3.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.6-.1 1.7-.7 1.9-1.4.2-.7.2-1.2.2-1.4-.1-.1-.3-.2-.5-.3ZM12 2a10 10 0 0 0-8.6 15.1L2 22l5.1-1.3A10 10 0 1 0 12 2Z"/></svg>
+  </a>
+
+  <button id="backTop" class="back-top" type="button" aria-label="Back to top">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 15 6-6 6 6"/></svg>
+  </button>
+
+  <script src="script.js"></script>
+</body>
+</html>

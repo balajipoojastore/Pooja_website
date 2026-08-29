@@ -1,0 +1,14 @@
+import { Minus, Plus, X } from 'lucide-react';
+import { useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
+import { useProductsByIds } from '../../hooks/useStoreData';
+import { useCartStore } from '../../stores/cartStore';
+import { useUiStore } from '../../stores/uiStore';
+import { formatINR } from '../../utils/money';
+
+export function QuickView() {
+  const id = useUiStore((state) => state.quickViewProductId); const close = useUiStore((state) => state.setQuickViewProductId); const { data: products } = useProductsByIds(id ? [id] : []); const product = products?.find((item) => item.id === id); const line = useCartStore((state) => state.lines.find((item) => item.productId === id)); const add = useCartStore((state) => state.add); const setQuantity = useCartStore((state) => state.setQuantity); const closeRef = useRef<HTMLButtonElement>(null);
+  useEffect(() => { if (!id) return; closeRef.current?.focus(); const onKeyDown = (event: KeyboardEvent) => { if (event.key === 'Escape') close(null); }; document.addEventListener('keydown', onKeyDown); return () => document.removeEventListener('keydown', onKeyDown); }, [id, close]);
+  if (!id || !product) return null;
+  return <div className="quick-view open" onMouseDown={(event) => { if (event.currentTarget === event.target) close(null); }}><article className="quick-sheet" role="dialog" aria-modal="true" aria-labelledby="quick-title"><button ref={closeRef} className="round-btn" onClick={() => close(null)} aria-label="Close product view"><X /></button><div className="quick-layout"><div className="quick-gallery">{product.image_url ? <img src={product.image_url} alt={product.name} /> : <div className="image-placeholder">P</div>}</div><div className="quick-info"><span className="label">{product.category?.name}</span><h2 id="quick-title">{product.name}</h2><div className="price-row"><strong>{formatINR(product.price_paise)}</strong>{product.mrp_paise > product.price_paise && <small>{formatINR(product.mrp_paise)}</small>}</div><p>{product.description || product.short_description}</p><div className="detail-grid"><span><b>Unit:</b> {product.unit_label}</span><span><b>Stock:</b> {product.stock_status}</span><span><b>Delivery:</b> {product.delivery_label}</span></div><Link to={`/product/${product.slug}`} onClick={() => close(null)}>View complete product details</Link></div></div><div className="product-purchase-bar">{line ? <span className="stepper"><button onClick={() => setQuantity(product.id, line.quantity - 1)} aria-label="Decrease"><Minus /></button><span className="qty">{line.quantity}</span><button onClick={() => setQuantity(product.id, line.quantity + 1)} aria-label="Increase"><Plus /></button></span> : <span />}<button className="add-btn" disabled={!product.in_stock} onClick={() => add(product.id)}>Add to Cart</button><Link className="buy-btn" to="/checkout" onClick={() => { if (!line) add(product.id); close(null); }}>Buy Now</Link></div></article></div>;
+}
