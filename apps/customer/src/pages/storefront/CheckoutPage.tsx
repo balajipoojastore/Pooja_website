@@ -1,9 +1,9 @@
 import { Check, LoaderCircle, LockKeyhole, MapPin, ShieldCheck } from 'lucide-react';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useCustomerAuth } from '../../context/CustomerAuthContext';
 import { useToast } from '../../context/ToastContext';
-import { useOffers, useProductsByIds, useSiteSettings } from '../../hooks/useStoreData';
+import { useOffers, useProductsByIds } from '../../hooks/useStoreData';
 import { checkPincode } from '../../services/deliveryService';
 import { createCodOrder } from '../../services/orderService';
 import { useCartStore } from '../../stores/cartStore';
@@ -15,7 +15,6 @@ export default function CheckoutPage() {
   const lines = useCartStore((state) => state.lines);
   const clear = useCartStore((state) => state.clear);
   const { data: products = [] } = useProductsByIds(lines.map((line) => line.productId));
-  const { data: settings } = useSiteSettings();
   const { data: offers = [] } = useOffers();
   const defaultAddress = auth.addresses.find((address) => address.is_default) ?? auth.addresses[0];
   const [addressId, setAddressId] = useState(defaultAddress?.id ?? '');
@@ -24,18 +23,13 @@ export default function CheckoutPage() {
   const [offerCode, setOfferCode] = useState('');
   const [appliedCode, setAppliedCode] = useState('');
   const [submitting, setSubmitting] = useState(false);
-  const [deliveryFee, setDeliveryFee] = useState(settings?.deliveryChargePaise ?? 0);
   const submittingRef = useRef(false);
   const idempotencyKey = useRef(crypto.randomUUID());
   const navigate = useNavigate(); const { showToast } = useToast();
   const selectedAddress = auth.addresses.find((address) => address.id === addressId) ?? defaultAddress;
   const viewLines = useMemo(() => lines.map((line) => ({ ...line, product: products.find((item) => item.id === line.productId) })).filter((line) => line.product), [lines, products]);
   const offer = offers.find((item) => item.code?.toUpperCase() === appliedCode.toUpperCase());
-  const totals = calculateCartTotals(viewLines.map((line) => ({ pricePaise: line.product!.price_paise, quantity: line.quantity })), deliveryFee, settings?.freeDeliveryThresholdPaise ?? Number.MAX_SAFE_INTEGER, offer);
-  useEffect(() => {
-    if (!selectedAddress) return;
-    void checkPincode(selectedAddress.pincode).then((area) => setDeliveryFee(area?.delivery_fee_paise ?? 0)).catch(() => setDeliveryFee(0));
-  }, [selectedAddress]);
+  const totals = calculateCartTotals(viewLines.map((line) => ({ pricePaise: line.product!.price_paise, quantity: line.quantity })), 0, 0, offer);
 
   if (!viewLines.length) return <div className="listing-page shell"><div className="empty-state"><h1>Your cart is empty</h1><p>Add products before starting checkout.</p><Link className="button button--dark" to="/products">Browse products</Link></div></div>;
   const placeOrder = async () => {

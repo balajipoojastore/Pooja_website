@@ -116,13 +116,15 @@ The admin app subscribes to `orders` through authenticated Supabase Realtime. It
 The browser sends an owned address ID, product UUIDs/quantities, optional offer code, delivery instructions, and a UUID idempotency key. It does not send trusted prices or totals. `create-cod-order` rate-limits requests and the `create_authenticated_cod_order` transaction:
 
 1. validates customer data, serviceable PIN, products, publication/stock, quantities, and offer validity;
-2. reads current prices and computes subtotal, discount, delivery fee, and total in integer paise;
+2. reads current prices and computes subtotal, discounts, free delivery, and the total in integer paise;
 3. stores the normalized order and immutable order-item snapshots;
 4. inserts exactly one initial `placed` history event;
 5. generates 32 random bytes and stores only the SHA-256 tracking-token hash;
 6. returns the raw token once with safe confirmation data.
 
 Repeated idempotency keys return the existing order and never create duplicates. The cart is cleared only after a successful response.
+
+Delivery is free for every serviceable PIN code. The ₹599 minimum purchase remains enforced independently. The database forces delivery settings and every newly inserted order to a zero delivery fee while retaining historic order snapshots unchanged.
 
 Customers may optionally grant one-time browser geolocation access while entering an address. The storefront converts the coordinates into a strict `https://www.google.com/maps?q=latitude,longitude` link; it does not load a Google Maps SDK, require an API key, or continuously track the customer. The database rejects other domains and invalid coordinates. Checkout copies the saved link into the immutable order snapshot, and authorized staff receive an “Open delivery location in Google Maps” action on the order detail page.
 

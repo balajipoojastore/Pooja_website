@@ -14,8 +14,6 @@ const keyMap: Record<string, keyof SiteSettings> = {
   footer_description: 'footerDescription',
   festival_heading: 'festivalHeading',
   festival_description: 'festivalDescription',
-  delivery_charge_paise: 'deliveryChargePaise',
-  free_delivery_threshold_paise: 'freeDeliveryThresholdPaise',
   store_terms: 'terms',
   general_announcement: 'generalAnnouncement',
   reviews: 'reviews',

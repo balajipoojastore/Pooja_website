@@ -17,17 +17,16 @@ export function calculateDiscount(subtotalPaise: number, offer?: Offer | null): 
 
 export function calculateCartTotals(
   lines: Array<{ pricePaise: number; quantity: number }>,
-  deliveryFeePaise: number,
-  freeDeliveryThresholdPaise: number,
+  _deliveryFeePaise: number,
+  _freeDeliveryThresholdPaise: number,
   offer?: Offer | null,
 ) {
   const subtotalPaise = lines.reduce((sum, line) => sum + line.pricePaise * line.quantity, 0);
   const discountPaise = calculateDiscount(subtotalPaise, offer);
-  const chargedDeliveryPaise = subtotalPaise >= freeDeliveryThresholdPaise ? 0 : deliveryFeePaise;
   return {
     subtotalPaise,
     discountPaise,
-    deliveryFeePaise: chargedDeliveryPaise,
-    totalPaise: subtotalPaise - discountPaise + chargedDeliveryPaise,
+    deliveryFeePaise: 0,
+    totalPaise: subtotalPaise - discountPaise,
   };
 }

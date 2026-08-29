@@ -21,8 +21,8 @@ export const DEFAULT_SETTINGS: SiteSettings = {
   footerDescription: 'A considered collection for daily rituals, celebrations, and moments of devotion.',
   festivalHeading: 'Auspicious picks for every celebration',
   festivalDescription: 'Bring warmth and tradition home with our seasonal edit.',
-  deliveryChargePaise: 4000,
-  freeDeliveryThresholdPaise: 79900,
+  deliveryChargePaise: 0,
+  freeDeliveryThresholdPaise: 0,
   terms: 'I agree to the store terms, Cash on Delivery conditions, and the no replacement, return or refund policy after delivery.',
   generalAnnouncement: '',
   reviews: [

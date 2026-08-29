@@ -15,8 +15,8 @@ describe('money utilities', () => {
     expect(calculateDiscount(100000, offer({ discount_type: 'fixed', discount_value: 15000 }))).toBe(15000);
     expect(calculateDiscount(100000, offer({ minimum_order_paise: 100001 }))).toBe(0);
   });
-  it('calculates subtotal, free delivery and final total in paise', () => {
-    expect(calculateCartTotals([{ pricePaise: 4999, quantity: 2 }], 4000, 79900)).toEqual({ subtotalPaise: 9998, discountPaise: 0, deliveryFeePaise: 4000, totalPaise: 13998 });
+  it('always provides free delivery and calculates the final total in paise', () => {
+    expect(calculateCartTotals([{ pricePaise: 4999, quantity: 2 }], 4000, 79900)).toEqual({ subtotalPaise: 9998, discountPaise: 0, deliveryFeePaise: 0, totalPaise: 9998 });
     expect(calculateCartTotals([{ pricePaise: 40000, quantity: 2 }], 4000, 79900).deliveryFeePaise).toBe(0);
   });
 });

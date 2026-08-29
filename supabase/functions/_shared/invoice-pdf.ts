@@ -161,7 +161,7 @@ export async function buildInvoicePdf(data: InvoiceData): Promise<Uint8Array> {
   const totals = [
     ['Subtotal', money(data.subtotalPaise)],
     ['Discount', data.discountPaise ? `- ${money(data.discountPaise)}` : money(0)],
-    ['Delivery fee', money(data.deliveryFeePaise)],
+    ['Delivery', data.deliveryFeePaise > 0 ? money(data.deliveryFeePaise) : 'FREE'],
   ];
   totals.forEach(([label, value], index) => {
     const lineY = totalsTop - 42 - index * 20;

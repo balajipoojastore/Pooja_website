@@ -4,7 +4,7 @@ export interface ServerArea { pincode: string; delivery_fee_paise: number; minim
 export interface ServerOffer { discount_type: 'fixed' | 'percentage'; discount_value: number; minimum_order_paise: number; maximum_discount_paise: number | null; is_active: boolean }
 
 export function calculateAuthoritativeOrder(input: {
-  lines: ServerLine[]; products: ServerProduct[]; area: ServerArea | null; offer?: ServerOffer | null; freeDeliveryThresholdPaise: number;
+  lines: ServerLine[]; products: ServerProduct[]; area: ServerArea | null; offer?: ServerOffer | null;
 }) {
   if (!input.area?.is_active) throw new Error('Unserviceable PIN code.');
   if (!input.lines.length || input.lines.length > 30) throw new Error('Invalid order items.');
@@ -26,6 +26,6 @@ export function calculateAuthoritativeOrder(input: {
     discountPaise = input.offer.discount_type === 'fixed' ? input.offer.discount_value : Math.floor(subtotalPaise * input.offer.discount_value / 100);
     discountPaise = Math.min(discountPaise, input.offer.maximum_discount_paise ?? discountPaise, subtotalPaise);
   }
-  const deliveryFeePaise = subtotalPaise >= input.freeDeliveryThresholdPaise ? 0 : input.area.delivery_fee_paise;
+  const deliveryFeePaise = 0;
   return { subtotalPaise, discountPaise, deliveryFeePaise, totalPaise: subtotalPaise - discountPaise + deliveryFeePaise };
 }

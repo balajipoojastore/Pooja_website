@@ -64,10 +64,9 @@ Deno.serve(async (request) => {
   await client.from('order_submission_attempts').insert({ request_fingerprint: digest });
 
   const itemIds = body.items.map((item) => item.product_id);
-  const [productsResult, addressResult, thresholdResult] = await Promise.all([
+  const [productsResult, addressResult] = await Promise.all([
     client.from('products').select('id,price_paise,is_published,in_stock').in('id', itemIds),
     client.from('customer_addresses').select('id,customer_id,pincode').eq('id', body.address_id).eq('customer_id', customerId).maybeSingle(),
-    client.from('site_content').select('content_value').eq('content_key', 'free_delivery_threshold_paise').maybeSingle(),
   ]);
   if (!addressResult.data) return jsonResponse({ error: 'Choose a valid delivery address.' }, 400, origin, 'customer');
   const { data: area } = await client.from('serviceable_pincodes')
@@ -81,7 +80,7 @@ Deno.serve(async (request) => {
     if (data && (!data.starts_at || Date.parse(data.starts_at) <= now) && (!data.ends_at || Date.parse(data.ends_at) >= now)) offer = data;
   }
   try {
-    calculateAuthoritativeOrder({ lines: body.items, products: productsResult.data ?? [], area, offer, freeDeliveryThresholdPaise: Number(thresholdResult.data?.content_value ?? 2_147_483_647) });
+    calculateAuthoritativeOrder({ lines: body.items, products: productsResult.data ?? [], area, offer });
   } catch (error) {
     return jsonResponse({ error: error instanceof Error ? error.message : 'Invalid order.' }, 400, origin, 'customer');
   }

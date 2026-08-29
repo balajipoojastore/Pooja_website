@@ -2,7 +2,7 @@ import { ArrowRight, Minus, Plus, Trash2 } from 'lucide-react';
 import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { EmptyState } from '../../components/common/EmptyState';
-import { useDeliveryArea, useProductsByIds, useSiteSettings } from '../../hooks/useStoreData';
+import { useDeliveryArea, useProductsByIds } from '../../hooks/useStoreData';
 import { useCartStore } from '../../stores/cartStore';
 import { useUiStore } from '../../stores/uiStore';
 import { calculateCartTotals, formatINR } from '../../utils/money';
@@ -13,10 +13,9 @@ export default function CartPage() {
   const remove = useCartStore((state) => state.remove);
   const selectedPincode = useUiStore((state) => state.selectedPincode);
   const { data: products = [] } = useProductsByIds(lines.map((line) => line.productId));
-  const { data: settings } = useSiteSettings();
   const deliveryArea = useDeliveryArea(selectedPincode);
   const viewLines = useMemo(() => lines.map((line) => ({ ...line, product: products.find((item) => item.id === line.productId) })).filter((line) => line.product), [lines, products]);
-  const totals = calculateCartTotals(viewLines.map((line) => ({ pricePaise: line.product!.price_paise, quantity: line.quantity })), settings?.deliveryChargePaise ?? 0, settings?.freeDeliveryThresholdPaise ?? Number.MAX_SAFE_INTEGER);
+  const totals = calculateCartTotals(viewLines.map((line) => ({ pricePaise: line.product!.price_paise, quantity: line.quantity })), 0, 0);
   const minimumOrderPaise = deliveryArea.data?.minimum_order_paise ?? null;
   const minimumShortfallPaise = minimumOrderPaise === null ? null : Math.max(0, minimumOrderPaise - totals.subtotalPaise);
   const canCheckout = minimumShortfallPaise === 0;
@@ -35,7 +34,7 @@ export default function CartPage() {
         <div id="minimum-order-message" className={`minimum-order-message ${canCheckout ? 'is-met' : ''}`} role="status">
           {deliveryArea.isLoading ? 'Checking the minimum order for your delivery area…' : deliveryArea.isError || !deliveryArea.data ? 'We could not verify the delivery minimum. Please retry before checkout.' : minimumShortfallPaise! > 0 ? <>Add <strong>{formatINR(minimumShortfallPaise!)}</strong> more to reach the {formatINR(minimumOrderPaise!)} minimum for PIN {selectedPincode}.</> : <>Minimum order of <strong>{formatINR(minimumOrderPaise!)}</strong> reached.</>}
         </div>
-        <p>Final prices, offers, serviceability, and delivery fees are securely verified during checkout.</p>
+        <p>Final prices, offers, serviceability, and the ₹599 minimum are securely verified during checkout. Delivery is free.</p>
         {canCheckout ? <Link className="button button--dark" to="/checkout">Continue to checkout <ArrowRight /></Link> : <button className="button button--dark" type="button" disabled aria-describedby="minimum-order-message">Continue to checkout <ArrowRight /></button>}
         <Link to="/products">Continue shopping</Link>
       </aside>
