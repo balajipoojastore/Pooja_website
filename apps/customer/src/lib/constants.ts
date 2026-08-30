@@ -7,6 +7,8 @@ export const ACTIVE_CATEGORIES = [
   { name: 'Diyas & Wicks', slug: 'diyas-wicks', folder: 'Mud Items' },
   { name: 'Kumkum Haldi Chandan', slug: 'kumkum-haldi-chandan', folder: 'Kumkum Haldi Chandan' },
   { name: 'Oils & Ghee', slug: 'oils-ghee', folder: 'Oils & Ghee' },
+  { name: 'Camphor & Matches', slug: 'camphor-matches', folder: 'Camphor & Matches' },
+  { name: 'Havan Samagri', slug: 'havan-samagri', folder: 'Havan Samagri' },
 ] as const;
 
 export const DEFAULT_SETTINGS: SiteSettings = {

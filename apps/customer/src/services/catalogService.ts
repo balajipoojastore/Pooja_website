@@ -39,6 +39,7 @@ function localImageUrl(row: CatalogValidationRow): string | null {
 
 const localProducts: Product[] = (localRows as CatalogValidationRow[])
   .filter((row) => row.sku && row.validationStatus !== 'skipped' && row.mrpPaise !== null && row.sellingPricePaise !== null)
+  .filter((row) => categoryByName.has(row.websiteCategory))
   .map((row, index) => {
     const category = categoryByName.get(row.websiteCategory)!;
     const position = index + 1;

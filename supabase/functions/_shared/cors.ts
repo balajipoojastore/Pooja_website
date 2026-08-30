@@ -6,6 +6,15 @@ const customerDevelopmentOrigins = [
   'https://pseudosensational-willis-unobnoxiously.ngrok-free.dev',
 ];
 
+// Stable production aliases are kept as exact defaults so checkout remains
+// available even when a Supabase project secret is accidentally omitted.
+// Additional preview/custom origins still belong in CUSTOMER_APP_ORIGINS.
+const customerProductionOrigins = [
+  'https://pooja-website-customer.vercel.app',
+  'https://balaji-pooja-store.com',
+  'https://www.balaji-pooja-store.com',
+];
+
 const adminDevelopmentOrigins = [
   'http://localhost:5174',
   'http://127.0.0.1:5174',
@@ -22,9 +31,9 @@ export function allowedOrigins(audience: FunctionAudience): string[] {
   const configured = audience === 'customer' ? [...customer, ...shared]
     : audience === 'admin' ? [...admin, ...shared]
     : [...customer, ...admin, ...shared];
-  const development = audience === 'customer' ? customerDevelopmentOrigins
+  const development = audience === 'customer' ? [...customerDevelopmentOrigins, ...customerProductionOrigins]
     : audience === 'admin' ? adminDevelopmentOrigins
-    : [...customerDevelopmentOrigins, ...adminDevelopmentOrigins];
+    : [...customerDevelopmentOrigins, ...customerProductionOrigins, ...adminDevelopmentOrigins];
   return [...new Set([...development, ...configured])];
 }
 
