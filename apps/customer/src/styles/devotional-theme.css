@@ -600,6 +600,99 @@ picture.footer-brand-mark img {
   background: transparent;
   box-shadow: none;
 }
+.home-devotional-stage .hero-strip .promo-card--campaign {
+  position: relative;
+  isolation: isolate;
+  min-height: 0;
+  height: clamp(270px,68vw,520px);
+  padding: 0;
+  display: block;
+  overflow: hidden;
+  border: 1px solid rgba(255,241,214,.72);
+  border-radius: 18px;
+  background: rgba(87,31,12,.22);
+  box-shadow: 0 16px 38px rgba(73,29,10,.18);
+}
+.home-devotional-stage .hero-strip .promo-card--campaign .promo-card__backdrop {
+  position: absolute;
+  z-index: -2;
+  inset: -18px;
+  width: calc(100% + 36px);
+  height: calc(100% + 36px);
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  object-fit: cover;
+  filter: blur(18px) saturate(.9);
+  opacity: .58;
+  transform: scale(1.06);
+}
+.home-devotional-stage .hero-strip .promo-card--campaign .promo-card__media {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  object-fit: contain;
+  background: transparent;
+  box-shadow: none;
+}
+.home-devotional-stage .hero-strip .promo-card--campaign::after {
+  content: "";
+  display: block;
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(180deg,transparent 45%,rgba(40,14,7,.14) 66%,rgba(40,14,7,.82) 100%);
+}
+.home-devotional-stage .hero-strip .promo-card > .promo-card__campaign-copy {
+  position: absolute;
+  z-index: 2;
+  right: 14px;
+  bottom: 14px;
+  left: 14px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: end;
+  gap: 4px 12px;
+  color: #fffaf0;
+}
+.home-devotional-stage .hero-strip .promo-card__campaign-copy .label,
+.home-devotional-stage .hero-strip .promo-card__campaign-copy h1,
+.home-devotional-stage .hero-strip .promo-card__campaign-copy p {
+  color: inherit;
+  text-shadow: 0 2px 12px rgba(29,10,5,.68);
+}
+.home-devotional-stage .hero-strip .promo-card__campaign-copy .label {
+  grid-column: 1;
+  font-size: 10px;
+}
+.home-devotional-stage .hero-strip .promo-card__campaign-copy h1 {
+  grid-column: 1;
+  max-width: 24ch;
+  margin: 0;
+  font-size: clamp(1.15rem,4.6vw,1.75rem);
+  line-height: 1.08;
+}
+.home-devotional-stage .hero-strip .promo-card__campaign-copy p {
+  grid-column: 1;
+  max-width: 42ch;
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.35;
+}
+.home-devotional-stage .hero-strip .promo-card__campaign-copy .promo-link {
+  grid-column: 2;
+  grid-row: 1 / span 3;
+  align-self: end;
+  margin: 0;
+  white-space: nowrap;
+  box-shadow: 0 8px 20px rgba(71,24,7,.24);
+}
 .home-devotional-stage .category-bento-section {
   margin: 18px 14px 0;
   padding: 18px 16px 16px;
@@ -625,6 +718,11 @@ picture.footer-brand-mark img {
     margin: 22px 24px 0;
     padding: 22px 24px 20px;
     border-radius: 24px;
+  }
+  .home-devotional-stage .hero-strip .promo-card > .promo-card__campaign-copy {
+    right: 24px;
+    bottom: 22px;
+    left: 24px;
   }
 }
 

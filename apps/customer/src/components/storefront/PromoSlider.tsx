@@ -60,15 +60,18 @@ export function PromoSlider() {
     <div ref={rail} className="promo-slider" aria-label="Promotional banners">
       {slides.map((slide, index) => {
         const isShopSlide = slide.id === shopSlide.id;
-        return <article className={`promo-card${isShopSlide ? ' promo-card--shop' : ''}`} key={slide.id}>
-          {!isShopSlide && <div>
+        return <article className={`promo-card ${isShopSlide ? 'promo-card--shop' : 'promo-card--campaign'}`} key={slide.id}>
+          {!isShopSlide && <div className="promo-card__campaign-copy">
             <span className="label">{slide.label || 'Featured'}</span>
             <h1>{slide.title}</h1>
             <p>{slide.subtitle}</p>
             <Link className="promo-link" to={slide.button_link || '/products'}>{slide.button_text || 'Shop now'}</Link>
           </div>}
           {slide.image_url
-            ? <img src={slide.image_url} alt={isShopSlide ? 'Balaji Pooja Store storefront in Varthur' : slide.title} loading={index === 0 ? 'eager' : 'lazy'} />
+            ? <>
+              {!isShopSlide && <img className="promo-card__backdrop" src={slide.image_url} alt="" aria-hidden="true" />}
+              <img className="promo-card__media" src={slide.image_url} alt={isShopSlide ? 'Balaji Pooja Store storefront in Varthur' : slide.title} loading={index === 0 ? 'eager' : 'lazy'} />
+            </>
             : <div className="promo-placeholder">P</div>}
         </article>;
       })}

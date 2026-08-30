@@ -26,6 +26,7 @@ describe('secure downloadable invoices', () => {
     expect(document.getTitle()).toBe('TPH-20260821-000001 invoice');
     expect(document.getSubject()).toBe('Cash on Delivery order invoice');
     expect(document.getPageCount()).toBeGreaterThan(0);
+    expect(pdf).toContain('/Subtype /Image');
     expect(pdf).not.toContain('tracking_token');
   });
 

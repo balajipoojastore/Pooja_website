@@ -1,4 +1,5 @@
-import { PDFDocument, PageSizes, StandardFonts, rgb, type PDFFont, type PDFPage } from 'pdf-lib';
+import { PDFDocument, PageSizes, StandardFonts, rgb, type PDFFont, type PDFImage, type PDFPage } from 'pdf-lib';
+import { BALAJI_INVOICE_LOGO_JPEG_BASE64 } from './invoice-logo.ts';
 
 export interface InvoiceLine {
   product_name: string;
@@ -39,6 +40,7 @@ const palette = {
 
 const money = (paise: number) => `INR ${(paise / 100).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 const safeText = (value: unknown) => String(value ?? '').normalize('NFKD').replace(/[^\x20-\x7E]/g, '').replace(/\s+/g, ' ').trim();
+const decodeBase64 = (value: string) => Uint8Array.from(atob(value), (character) => character.charCodeAt(0));
 
 function fitText(text: string, font: PDFFont, size: number, maxWidth: number): string {
   const safe = safeText(text);
@@ -88,13 +90,13 @@ function drawTableHeader(page: PDFPage, y: number, bold: PDFFont) {
   return y - 26;
 }
 
-function drawPrimaryHeader(page: PDFPage, data: InvoiceData, regular: PDFFont, bold: PDFFont) {
+function drawPrimaryHeader(page: PDFPage, data: InvoiceData, regular: PDFFont, bold: PDFFont, logo: PDFImage) {
   const { height } = page.getSize();
   page.drawRectangle({ x: 0, y: height - 108, width: 595.28, height: 108, color: palette.orange });
-  page.drawCircle({ x: 58, y: height - 54, size: 23, color: palette.white, opacity: 0.18 });
-  page.drawText('P', { x: 49.5, y: height - 64, size: 28, font: bold, color: palette.white });
-  page.drawText(fitText(data.storeName || 'The Pooja House', bold, 20, 280), { x: 91, y: height - 49, size: 20, font: bold, color: palette.white });
-  page.drawText('POOJA ESSENTIALS, DELIVERED', { x: 92, y: height - 68, size: 7.5, font: bold, color: palette.cream });
+  page.drawRectangle({ x: 27, y: height - 88, width: 68, height: 68, color: palette.white, opacity: 0.98 });
+  page.drawImage(logo, { x: 31, y: height - 84, width: 60, height: 60 });
+  page.drawText(fitText(data.storeName || 'The Pooja House', bold, 20, 274), { x: 105, y: height - 49, size: 20, font: bold, color: palette.white });
+  page.drawText('POOJA ESSENTIALS, DELIVERED', { x: 106, y: height - 68, size: 7.5, font: bold, color: palette.cream });
   page.drawText('ORDER INVOICE', { x: 417, y: height - 44, size: 14, font: bold, color: palette.white });
   page.drawText('CASH ON DELIVERY', { x: 435, y: height - 64, size: 7.5, font: bold, color: palette.cream });
 
@@ -111,10 +113,12 @@ function drawPrimaryHeader(page: PDFPage, data: InvoiceData, regular: PDFFont, b
   return height - 310;
 }
 
-function drawContinuationHeader(page: PDFPage, data: InvoiceData, bold: PDFFont) {
+function drawContinuationHeader(page: PDFPage, data: InvoiceData, bold: PDFFont, logo: PDFImage) {
   const { height } = page.getSize();
   page.drawRectangle({ x: 0, y: height - 58, width: 595.28, height: 58, color: palette.orange });
-  page.drawText(fitText(data.storeName || 'The Pooja House', bold, 15, 300), { x: 36, y: height - 36, size: 15, font: bold, color: palette.white });
+  page.drawRectangle({ x: 25, y: height - 49, width: 40, height: 40, color: palette.white, opacity: 0.98 });
+  page.drawImage(logo, { x: 28, y: height - 46, width: 34, height: 34 });
+  page.drawText(fitText(data.storeName || 'The Pooja House', bold, 15, 260), { x: 76, y: height - 36, size: 15, font: bold, color: palette.white });
   drawRight(page, `${data.orderNumber}  |  CONTINUED`, 559, height - 34, bold, 8, palette.white);
   return height - 82;
 }
@@ -127,8 +131,9 @@ export async function buildInvoicePdf(data: InvoiceData): Promise<Uint8Array> {
   document.setCreator('The Pooja House secure invoice service');
   const regular = await document.embedFont(StandardFonts.Helvetica);
   const bold = await document.embedFont(StandardFonts.HelveticaBold);
+  const logo = await document.embedJpg(decodeBase64(BALAJI_INVOICE_LOGO_JPEG_BASE64));
   let page = document.addPage(PageSizes.A4);
-  let y = drawPrimaryHeader(page, data, regular, bold);
+  let y = drawPrimaryHeader(page, data, regular, bold, logo);
   y = drawTableHeader(page, y, bold);
 
   for (let index = 0; index < data.lines.length; index += 1) {
@@ -137,7 +142,7 @@ export async function buildInvoicePdf(data: InvoiceData): Promise<Uint8Array> {
     const rowHeight = Math.max(43, 17 + productLines.length * 11);
     if (y - rowHeight < 165) {
       page = document.addPage(PageSizes.A4);
-      y = drawContinuationHeader(page, data, bold);
+      y = drawContinuationHeader(page, data, bold, logo);
       y = drawTableHeader(page, y, bold);
     }
     if (index % 2 === 1) page.drawRectangle({ x: 36, y: y - rowHeight, width: 523, height: rowHeight, color: palette.row });
@@ -153,7 +158,7 @@ export async function buildInvoicePdf(data: InvoiceData): Promise<Uint8Array> {
 
   if (y < 205) {
     page = document.addPage(PageSizes.A4);
-    y = drawContinuationHeader(page, data, bold);
+    y = drawContinuationHeader(page, data, bold, logo);
   }
   const totalsTop = y - 20;
   page.drawRectangle({ x: 326, y: totalsTop - 126, width: 233, height: 126, color: palette.cream, borderColor: palette.line, borderWidth: 0.8 });
