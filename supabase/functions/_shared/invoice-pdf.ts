@@ -1,5 +1,6 @@
 import { PDFDocument, PageSizes, StandardFonts, rgb, type PDFFont, type PDFImage, type PDFPage } from 'pdf-lib';
 import { BALAJI_INVOICE_LOGO_JPEG_BASE64 } from './invoice-logo.ts';
+import { INVOICE_PAYMENT_QR_PNG_BASE64 } from './invoice-payment-qr.ts';
 
 export interface InvoiceLine {
   product_name: string;
@@ -123,6 +124,17 @@ function drawContinuationHeader(page: PDFPage, data: InvoiceData, bold: PDFFont,
   return height - 82;
 }
 
+function drawPaymentPanel(page: PDFPage, regular: PDFFont, bold: PDFFont, paymentQr: PDFImage) {
+  page.drawRectangle({ x: 36, y: 54, width: 523, height: 108, color: palette.cream, borderColor: palette.line, borderWidth: 0.8 });
+  page.drawRectangle({ x: 44, y: 62, width: 92, height: 92, color: palette.white, borderColor: palette.line, borderWidth: 0.6 });
+  page.drawImage(paymentQr, { x: 48, y: 66, width: 84, height: 84 });
+  page.drawText('SCAN TO PAY AT DELIVERY', { x: 151, y: 139, size: 8, font: bold, color: palette.orangeDark });
+  page.drawText('Karnataka Bank', { x: 151, y: 120, size: 12, font: bold, color: palette.ink });
+  page.drawText('Account no: 0913202500001001', { x: 151, y: 101, size: 9, font: regular, color: palette.ink });
+  page.drawText('IFSC code: KARB0000913', { x: 151, y: 84, size: 9, font: regular, color: palette.ink });
+  page.drawText('Confirm the amount with the store before paying. Do not pay twice.', { x: 151, y: 66, size: 7.5, font: regular, color: palette.muted });
+}
+
 export async function buildInvoicePdf(data: InvoiceData): Promise<Uint8Array> {
   const document = await PDFDocument.create();
   document.setTitle(`${data.orderNumber} invoice`);
@@ -132,6 +144,7 @@ export async function buildInvoicePdf(data: InvoiceData): Promise<Uint8Array> {
   const regular = await document.embedFont(StandardFonts.Helvetica);
   const bold = await document.embedFont(StandardFonts.HelveticaBold);
   const logo = await document.embedJpg(decodeBase64(BALAJI_INVOICE_LOGO_JPEG_BASE64));
+  const paymentQr = await document.embedPng(decodeBase64(INVOICE_PAYMENT_QR_PNG_BASE64));
   let page = document.addPage(PageSizes.A4);
   let y = drawPrimaryHeader(page, data, regular, bold, logo);
   y = drawTableHeader(page, y, bold);
@@ -156,7 +169,7 @@ export async function buildInvoicePdf(data: InvoiceData): Promise<Uint8Array> {
     y -= rowHeight;
   }
 
-  if (y < 205) {
+  if (y < 320) {
     page = document.addPage(PageSizes.A4);
     y = drawContinuationHeader(page, data, bold, logo);
   }
@@ -184,6 +197,8 @@ export async function buildInvoicePdf(data: InvoiceData): Promise<Uint8Array> {
   page.drawRectangle({ x: 50, y: totalsTop - 108, width: 62, height: 22, color: palette.white, borderColor: palette.line, borderWidth: 0.7 });
   page.drawCircle({ x: 64, y: totalsTop - 97, size: 5, color: palette.success });
   page.drawText('COD', { x: 75, y: totalsTop - 100, size: 7.5, font: bold, color: palette.success });
+
+  drawPaymentPanel(page, regular, bold, paymentQr);
 
   const pages = document.getPages();
   pages.forEach((current, index) => {

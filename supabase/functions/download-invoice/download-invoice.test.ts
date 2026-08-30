@@ -4,6 +4,7 @@ import { PDFDocument } from 'pdf-lib';
 import { buildInvoicePdf } from '../_shared/invoice-pdf';
 
 const source = readFileSync(new URL('./index.ts', import.meta.url), 'utf8');
+const generatorSource = readFileSync(new URL('../_shared/invoice-pdf.ts', import.meta.url), 'utf8');
 
 describe('secure downloadable invoices', () => {
   it('generates a PDF from immutable snapshot values without a tracking secret', async () => {
@@ -26,8 +27,15 @@ describe('secure downloadable invoices', () => {
     expect(document.getTitle()).toBe('TPH-20260821-000001 invoice');
     expect(document.getSubject()).toBe('Cash on Delivery order invoice');
     expect(document.getPageCount()).toBeGreaterThan(0);
-    expect(pdf).toContain('/Subtype /Image');
+    expect((pdf.match(/\/Subtype \/Image/g) ?? []).length).toBeGreaterThanOrEqual(2);
     expect(pdf).not.toContain('tracking_token');
+  });
+
+  it('includes the store payment QR panel and supplied bank details', () => {
+    expect(generatorSource).toContain('SCAN TO PAY AT DELIVERY');
+    expect(generatorSource).toContain('Karnataka Bank');
+    expect(generatorSource).toContain('0913202500001001');
+    expect(generatorSource).toContain('KARB0000913');
   });
 
   it('requires a valid tracking hash, customer ownership, or active admin authorization', () => {
