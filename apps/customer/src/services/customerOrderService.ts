@@ -11,9 +11,14 @@ export type CustomerOrder = {
 };
 
 export async function listMyOrders(): Promise<CustomerOrder[]> {
-  const { data, error } = await requireSupabase().from('orders')
+  const client = requireSupabase();
+  const { data: userData, error: userError } = await client.auth.getUser();
+  if (userError || !userData.user) throw new Error('Sign in again to view your orders.');
+  const { data, error } = await client.from('orders')
     .select('id,order_number,status,total_paise,created_at,updated_at,order_items(product_name,sku,quantity,line_total_paise)')
-    .order('created_at', { ascending: false }).limit(50);
+    .eq('customer_id', userData.user.id)
+    .order('created_at', { ascending: false })
+    .limit(50);
   if (error) throw error;
   return (data ?? []) as CustomerOrder[];
 }

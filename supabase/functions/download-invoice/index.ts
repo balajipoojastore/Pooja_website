@@ -2,6 +2,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 import { corsHeaders, isOriginAllowed, jsonResponse } from '../_shared/cors.ts';
 import { buildInvoicePdf } from '../_shared/invoice-pdf.ts';
 import { constantTimeEqualHex, isTrackingTokenCurrent, sha256Hex } from '../track-order/tracking-security.ts';
+import { canDownloadInvoiceForAuthenticatedUser } from './authorization.ts';
 
 const unavailableMessage = 'Invoice not found or access is invalid.';
 const orderNumberPattern = /^TPH-[0-9]{8}-[0-9]{6}$/;
@@ -61,11 +62,17 @@ Deno.serve(async (request) => {
     if (jwt) {
       const { data: userData } = await service.auth.getUser(jwt);
       const user = userData.user;
-      if (user && !orderId && order.customer_id === user.id) authorized = true;
-      if (user && !authorized) {
+      let isActiveAdmin = false;
+      if (user && orderId) {
         const { data: profile } = await service.from('admin_profiles').select('is_active,role').eq('id', user.id).maybeSingle();
-        authorized = Boolean(profile?.is_active && adminRoles.has(String(profile.role)));
+        isActiveAdmin = Boolean(profile?.is_active && adminRoles.has(String(profile.role)));
       }
+      authorized = canDownloadInvoiceForAuthenticatedUser({
+        userId: user?.id ?? null,
+        orderCustomerId: order.customer_id ?? null,
+        requestedByOrderId: Boolean(orderId),
+        isActiveAdmin,
+      });
     }
   }
   if (!authorized) return jsonResponse({ error: unavailableMessage }, 401, origin, 'shared');
