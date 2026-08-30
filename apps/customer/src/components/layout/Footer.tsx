@@ -38,10 +38,13 @@ export function Footer() {
             <span>{address}</span>
           </a>
         </address>
-        <a className="footer-instagram" href={instagramUrl} target="_blank" rel="noopener noreferrer" aria-label="Follow Balaji Pooja Store Varthur on Instagram">
-          <Instagram aria-hidden="true" />
-          <span>balaji.pooja.store.varthur</span>
-        </a>
+        <div className="footer-business-meta">
+          <a className="footer-instagram" href={instagramUrl} target="_blank" rel="noopener noreferrer" aria-label="Follow Balaji Pooja Store Varthur on Instagram">
+            <Instagram aria-hidden="true" />
+            <span>balaji.pooja.store.varthur</span>
+          </a>
+          <p className="footer-gstin"><span>GSTIN</span><strong>29BSQPL2307A1ZW</strong></p>
+        </div>
         <div className="footer-promises" aria-label="Store promises"><span><Banknote />Cash on Delivery</span><span><ShieldCheck />Secure checkout</span><span><MapPin />Local delivery</span></div>
       </section>
       <nav className="footer-navigation" aria-label="Footer navigation">
