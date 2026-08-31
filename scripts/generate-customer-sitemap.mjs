@@ -115,7 +115,7 @@ function toXml(entries) {
 
 const generatedAt = new Date().toISOString();
 const corePages = [
-  { path: '/', loc: asUrl('/'), lastmod: formatLastModified(generatedAt), title: `${storeName} | Pooja essentials in Varthur`, description: 'Authentic pooja essentials, brass items, diyas, incense and more—delivered in Varthur, Bengaluru.', type: 'website' },
+  { path: '/', loc: asUrl('/'), lastmod: formatLastModified(generatedAt), title: `${storeName} | Pooja essentials in Varthur`, description: 'Authentic pooja essentials, brass items, diyas, incense and more - delivered in Varthur, Bengaluru.', type: 'website' },
   { path: '/products', loc: asUrl('/products'), lastmod: formatLastModified(generatedAt), title: `Pooja Products | ${storeName}`, description: 'Shop authentic pooja essentials for daily rituals, festivals and celebrations from Balaji Pooja Store.', type: 'website' },
 ];
 
