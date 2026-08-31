@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -p tsconfig.json --pretty false && vite build",
+    "build": "node ../../scripts/generate-customer-sitemap.mjs && tsc -p tsconfig.json --pretty false && vite build",
     "preview": "vite preview",
     "skeletons:build": "boneyard-js build http://localhost:5173 --force",
     "typecheck": "tsc -p tsconfig.json --pretty false",

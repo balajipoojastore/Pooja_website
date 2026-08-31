@@ -1,0 +1,14 @@
+User-agent: *
+Allow: /
+
+Disallow: /cart
+Disallow: /checkout
+Disallow: /order-success
+Disallow: /track/
+Disallow: /auth
+Disallow: /account
+Disallow: /orders
+Disallow: /profile
+Disallow: /addresses
+
+Sitemap: https://www.balaji-pooja-store.com/sitemap.xml

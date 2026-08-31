@@ -18,6 +18,8 @@ VITE_SUPABASE_URL=https://PROJECT.supabase.co
 VITE_SUPABASE_ANON_KEY=publishable-or-anon-key
 ```
 
+`SITE_URL` is optional and used only while generating `sitemap.xml`; it defaults to `https://www.balaji-pooja-store.com`. In Vercel, set `SITE_URL` to the canonical customer origin. The build generates a public sitemap containing the storefront, active category URLs, and published product URLs. It intentionally excludes account, checkout, cart, tracking, and other private routes.
+
 Production builds fail immediately if either value is missing, the URL is not HTTPS, or a service-role/secret key is supplied. Public access is constrained by RLS; checkout, tracking, and invoice downloads use origin-checked Supabase Edge Functions.
 
 ## Vercel project
@@ -51,3 +53,13 @@ After assigning the production domain, configure Supabase:
 5. Confirm both OTP email templates still use `{{ .Token }}` and perform one real production-domain OTP test.
 
 `vercel.json` supplies the customer-only build, immutable caching for hashed assets, security headers, and the SPA fallback needed when refreshing routes such as `/product/:slug`, `/checkout`, or `/track/:orderNumber`.
+
+## Google Search Console
+
+Add a **Domain property** for `balaji-pooja-store.com` and verify it with the DNS TXT record Google provides. Submit the canonical sitemap after each production deployment:
+
+```text
+https://www.balaji-pooja-store.com/sitemap.xml
+```
+
+`robots.txt` also references this sitemap. Do not submit private customer routes or any admin URL for indexing.

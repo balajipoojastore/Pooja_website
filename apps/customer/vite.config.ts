@@ -1,6 +1,25 @@
 import { defineConfig } from 'vitest/config';
 import react from '@vitejs/plugin-react';
-import { loadEnv } from 'vite';
+import { loadEnv, type Plugin } from 'vite';
+import { existsSync, readFileSync } from 'node:fs';
+
+const sitemapSource = new URL('./public/sitemap.xml', import.meta.url);
+const robotsSource = new URL('./public/robots.txt', import.meta.url);
+
+function customerSeoAssets(): Plugin {
+  return {
+    name: 'customer-seo-assets',
+    apply: 'build',
+    generateBundle() {
+      for (const [filename, source] of [['sitemap.xml', sitemapSource], ['robots.txt', robotsSource]] as const) {
+        if (!existsSync(source)) {
+          throw new Error(`${filename} was not generated before the customer build.`);
+        }
+        this.emitFile({ type: 'asset', fileName: filename, source: readFileSync(source, 'utf8') });
+      }
+    },
+  };
+}
 
 function isPrivilegedSupabaseKey(key: string) {
   if (/^sb_secret_/i.test(key) || /service[_-]?role/i.test(key)) return true;
@@ -28,7 +47,7 @@ export default defineConfig(({ command, mode }) => {
   }
 
   return {
-    plugins: [react()],
+    plugins: [react(), customerSeoAssets()],
     // Local catalog images support offline development only. Production images
     // come from Supabase Storage and should not inflate the Vercel deployment.
     publicDir: command === 'serve' ? '../../catalog/images' : false,
