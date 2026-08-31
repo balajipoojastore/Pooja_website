@@ -10,6 +10,7 @@ import { getProductBySlug } from '../../services/catalogService';
 import { useCartStore } from '../../stores/cartStore';
 import { useUiStore } from '../../stores/uiStore';
 import { formatINR } from '../../utils/money';
+import { SEO_SITE_URL, SEO_STORE_NAME, useJsonLd, usePageMetadata } from '../../lib/seo';
 
 export default function ProductDetailPage() {
   const { slug = '' } = useParams();
@@ -23,7 +24,30 @@ export default function ProductDetailPage() {
   const addRecent = useUiStore((state) => state.addRecentlyViewed);
 
   useEffect(() => { if (product) addRecent(product.id); }, [product, addRecent]);
-  useEffect(() => { if (product) document.title = `${product.name} | The Pooja House`; }, [product]);
+  usePageMetadata({
+    title: product ? `${product.name} | ${SEO_STORE_NAME}` : `Product | ${SEO_STORE_NAME}`,
+    description: product?.short_description ?? product?.description ?? 'Authentic pooja essentials from Balaji Pooja Store.',
+    pathname: `/product/${slug}`,
+    type: product ? 'product' : 'website',
+    image: product?.image_url,
+  });
+  useJsonLd('product-structured-data', product ? {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: product.name,
+    sku: product.sku,
+    description: product.short_description ?? product.description ?? product.name,
+    image: product.image_url ? [product.image_url] : undefined,
+    additionalProperty: { '@type': 'PropertyValue', name: 'Package size', value: product.unit_label },
+    offers: {
+      '@type': 'Offer',
+      url: `${SEO_SITE_URL}/product/${encodeURIComponent(product.slug)}`,
+      priceCurrency: 'INR',
+      price: (product.price_paise / 100).toFixed(2),
+      availability: product.in_stock ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
+      itemCondition: 'https://schema.org/NewCondition',
+    },
+  } : null);
 
   if (isLoading) return <PageLoader label="Opening product" />;
   if (error || !product) return <ErrorState message={error ? (error as Error).message : 'This product is unavailable or no longer published.'} />;

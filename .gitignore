@@ -19,3 +19,4 @@ reports/playwright/**/private/
 reports/playwright/
 playwright/.auth/
 /catalog/images/
+apps/customer/public/seo-pages.json

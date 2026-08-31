@@ -7,6 +7,7 @@ import { ProductGridSkeleton } from '../../components/common/Loading';
 import { ProductCard } from '../../components/storefront/ProductCard';
 import { useDebouncedValue } from '../../hooks/useDebouncedValue';
 import { useCategories, useProductsPage } from '../../hooks/useStoreData';
+import { SEO_STORE_NAME, usePageMetadata } from '../../lib/seo';
 
 const PAGE_SIZE = 16;
 
@@ -36,9 +37,13 @@ export default function ProductsPage({ categorySlug }: { categorySlug?: string }
   const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
   const categoryName = categories.find((item) => item.slug === category)?.name;
 
-  useEffect(() => {
-    document.title = `${categoryName ?? 'Products'} | The Pooja House`;
-  }, [categoryName]);
+  usePageMetadata({
+    title: `${categoryName ?? 'Pooja Products'} | ${SEO_STORE_NAME}`,
+    description: categoryName
+      ? `Shop ${categoryName} for daily rituals, festivals and celebrations from Balaji Pooja Store.`
+      : 'Shop authentic pooja essentials, incense, brass items, diyas and more from Balaji Pooja Store.',
+    pathname: categorySlug ? `/category/${categorySlug}` : '/products',
+  });
 
   return <div className="listing-page shell">
     <header className="page-heading"><span className="eyebrow">Pooja essentials</span><h1>{categoryName ?? 'All products'}</h1><p>{categoryName ? `Shop ${categoryName.toLowerCase()} for everyday worship and celebrations.` : 'Fast, dependable access to authentic pooja essentials.'}</p></header>
