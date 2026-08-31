@@ -1,9 +1,19 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": "vite",
+  "cleanUrls": true,
+  "trailingSlash": false,
   "installCommand": "cd ../.. && npm ci",
   "buildCommand": "cd ../.. && npm run build:customer",
   "outputDirectory": "dist",
+  "redirects": [
+    {
+      "source": "/(.*)",
+      "has": [{ "type": "host", "value": "balaji-pooja-store.com" }],
+      "destination": "https://www.balaji-pooja-store.com/$1",
+      "permanent": true
+    }
+  ],
   "headers": [
     {
       "source": "/(.*)",

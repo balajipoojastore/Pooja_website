@@ -2,7 +2,7 @@ import { defineConfig } from 'vitest/config';
 import react from '@vitejs/plugin-react';
 import { loadEnv, type Plugin } from 'vite';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
-import { resolve } from 'node:path';
+import { dirname, resolve } from 'node:path';
 
 const sitemapSource = new URL('./public/sitemap.xml', import.meta.url);
 const robotsSource = new URL('./public/robots.txt', import.meta.url);
@@ -71,6 +71,11 @@ function pageMetadata(page: SeoPage) {
     <!-- SEO_PAGE_METADATA_END -->`;
 }
 
+function staticHtmlPath(outputDirectory: string, pathname: string) {
+  const normalizedPath = pathname.replace(/^\/+|\/+$/gu, '');
+  return resolve(outputDirectory, `${normalizedPath}.html`);
+}
+
 function customerSeoAssets(): Plugin {
   const outputDirectory = resolve(import.meta.dirname, 'dist');
   return {
@@ -97,9 +102,9 @@ function customerSeoAssets(): Plugin {
       for (const page of pages) {
         if (page.path === '/') continue;
         const html = baseHtml.replace(/<!-- SEO_PAGE_METADATA_START -->[\s\S]*?<!-- SEO_PAGE_METADATA_END -->/u, pageMetadata(page));
-        const targetDirectory = resolve(outputDirectory, page.path.replace(/^\/+|\/+$/gu, ''));
-        mkdirSync(targetDirectory, { recursive: true });
-        writeFileSync(resolve(targetDirectory, 'index.html'), html, 'utf8');
+        const targetPath = staticHtmlPath(outputDirectory, page.path);
+        mkdirSync(dirname(targetPath), { recursive: true });
+        writeFileSync(targetPath, html, 'utf8');
       }
     },
   };
