@@ -20,7 +20,7 @@ const fixtureProduct: Product = {
   image_url: 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=',
   in_stock: true,
   stock_status: 'In stock',
-  delivery_label: 'Delivery today',
+  delivery_label: '4 hours-1 day',
   is_popular: true,
   is_best_seller: false,
   is_recommended: false,

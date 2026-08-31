@@ -7,7 +7,35 @@ import type { Product } from '../../types/domain';
 import { formatINR } from '../../utils/money';
 
 export function ProductCard({ product }: { product: Product; featured?: boolean }) {
-  const line = useCartStore((state) => state.lines.find((item) => item.productId === product.id)); const add = useCartStore((state) => state.add); const setQuantity = useCartStore((state) => state.setQuantity); const wishlist = useUiStore((state) => state.wishlist); const toggleWishlist = useUiStore((state) => state.toggleWishlist); const setQuickView = useUiStore((state) => state.setQuickViewProductId); const { showToast } = useToast();
-  const wished = wishlist.includes(product.id); const discount = product.mrp_paise > product.price_paise ? Math.round((1 - product.price_paise / product.mrp_paise) * 100) : 0;
-  return <article className="product-card"><div className="product-media"><Link to={`/product/${product.slug}`}>{product.image_url ? <img src={product.image_url} alt={product.name} loading="lazy" /> : <div className="image-placeholder">P</div>}</Link>{discount > 0 && <span className="discount-badge">{discount}% OFF</span>}<span className="stock-badge">{product.in_stock ? product.stock_status : 'Sold out'}</span><button className={`wish-btn ${wished ? 'active' : ''}`} onClick={() => toggleWishlist(product.id)} aria-label={`${wished ? 'Remove' : 'Add'} ${product.name} ${wished ? 'from' : 'to'} wishlist`}><Heart fill={wished ? 'currentColor' : 'none'} /></button></div><div className="product-body"><Link to={`/product/${product.slug}`}><h3 className="product-name">{product.name}</h3></Link><p className="product-desc">{product.short_description || `${product.unit_label} · SKU ${product.sku}`}</p><div className="rating-row"><span className="rating-pill">{product.category?.name}</span><span>{product.delivery_label}</span></div><div className="price-row"><strong>{formatINR(product.price_paise)}</strong>{discount > 0 && <small>{formatINR(product.mrp_paise)}</small>}</div><div className="product-actions"><button className="quick-btn" onClick={() => setQuickView(product.id)}>View</button>{!product.in_stock ? <button className="add-btn" disabled>Sold out</button> : !line ? <button className="add-btn" onClick={() => { add(product.id); showToast(`${product.name} added to cart.`); }}>ADD</button> : <span className="stepper"><button aria-label="Decrease quantity" onClick={() => setQuantity(product.id, line.quantity - 1)}><Minus /></button><span className="qty">{line.quantity}</span><button aria-label="Increase quantity" onClick={() => setQuantity(product.id, line.quantity + 1)}><Plus /></button></span>}</div></div></article>;
+  const line = useCartStore((state) => state.lines.find((item) => item.productId === product.id));
+  const add = useCartStore((state) => state.add);
+  const setQuantity = useCartStore((state) => state.setQuantity);
+  const wishlist = useUiStore((state) => state.wishlist);
+  const toggleWishlist = useUiStore((state) => state.toggleWishlist);
+  const setQuickView = useUiStore((state) => state.setQuickViewProductId);
+  const { showToast } = useToast();
+  const wished = wishlist.includes(product.id);
+  const discount = product.mrp_paise > product.price_paise ? Math.round((1 - product.price_paise / product.mrp_paise) * 100) : 0;
+
+  return <article className="product-card">
+    <div className="product-media">
+      <Link to={`/product/${product.slug}`}>{product.image_url ? <img src={product.image_url} alt={product.name} loading="lazy" /> : <div className="image-placeholder">P</div>}</Link>
+      {discount > 0 && <span className="discount-badge">{discount}% OFF</span>}
+      <span className="stock-badge">{product.in_stock ? product.stock_status : 'Sold out'}</span>
+      <button className={`wish-btn ${wished ? 'active' : ''}`} onClick={() => toggleWishlist(product.id)} aria-label={`${wished ? 'Remove' : 'Add'} ${product.name} ${wished ? 'from' : 'to'} wishlist`}><Heart fill={wished ? 'currentColor' : 'none'} /></button>
+    </div>
+    <div className="product-body">
+      <Link to={`/product/${product.slug}`}><h3 className="product-name">{product.name}</h3></Link>
+      <p className="product-desc">{product.short_description || `${product.unit_label} · SKU ${product.sku}`}</p>
+      <div className="rating-row"><span className="rating-pill">{product.category?.name}</span><span>{product.delivery_label}</span></div>
+      <div className="price-row">
+        <span className="product-price-values"><strong>{formatINR(product.price_paise)}</strong>{discount > 0 && <small>{formatINR(product.mrp_paise)}</small>}</span>
+        <span className="product-unit-label">{product.unit_label}</span>
+      </div>
+      <div className="product-actions">
+        <button className="quick-btn" onClick={() => setQuickView(product.id)}>View</button>
+        {!product.in_stock ? <button className="add-btn" disabled>Sold out</button> : !line ? <button className="add-btn" onClick={() => { add(product.id); showToast(`${product.name} added to cart.`); }}>ADD</button> : <span className="stepper"><button aria-label="Decrease quantity" onClick={() => setQuantity(product.id, line.quantity - 1)}><Minus /></button><span className="qty">{line.quantity}</span><button aria-label="Increase quantity" onClick={() => setQuantity(product.id, line.quantity + 1)}><Plus /></button></span>}
+      </div>
+    </div>
+  </article>;
 }

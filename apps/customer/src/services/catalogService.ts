@@ -60,7 +60,7 @@ const localProducts: Product[] = (localRows as CatalogValidationRow[])
       image_url: localImageUrl(row),
       in_stock: row.inStock ?? false,
       stock_status: row.inStock ? 'In stock' : 'Out of stock',
-      delivery_label: 'Delivery in 1–3 days',
+      delivery_label: '4 hours-1 day',
       is_popular: position % 5 === 0 || position <= 8,
       is_best_seller: position % 7 === 0 || position <= 6,
       is_recommended: position % 3 === 0,
