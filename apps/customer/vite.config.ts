@@ -7,6 +7,8 @@ import { resolve } from 'node:path';
 const sitemapSource = new URL('./public/sitemap.xml', import.meta.url);
 const robotsSource = new URL('./public/robots.txt', import.meta.url);
 const seoManifestSource = new URL('./public/seo-pages.json', import.meta.url);
+const socialCardSource = new URL('./src/assets/balaji-pooja-store-shop.webp', import.meta.url);
+const socialCardUrl = 'https://www.balaji-pooja-store.com/social-card.webp';
 
 type SeoPage = {
   path: string;
@@ -49,8 +51,8 @@ function pageMetadata(page: SeoPage) {
   const description = escapeHtml(page.description);
   const url = escapeHtml(page.loc);
   const type = page.type === 'product' ? 'product' : 'website';
-  const image = page.image ? `\n    <meta property="og:image" content="${escapeHtml(page.image)}" />` : '';
-  const twitterCard = page.image ? 'summary_large_image' : 'summary';
+  const image = page.image ?? socialCardUrl;
+  const twitterCard = 'summary_large_image';
   return `<!-- SEO_PAGE_METADATA_START -->
     <title>${title}</title>
     <meta name="description" content="${description}" />
@@ -61,7 +63,8 @@ function pageMetadata(page: SeoPage) {
     <meta property="og:title" content="${title}" />
     <meta property="og:description" content="${description}" />
     <meta property="og:url" content="${url}" />
-    <meta name="twitter:card" content="${twitterCard}" />${image}
+    <meta name="twitter:card" content="${twitterCard}" />
+    <meta property="og:image" content="${escapeHtml(image)}" />
     <meta name="twitter:title" content="${title}" />
     <meta name="twitter:description" content="${description}" />
     ${productSchema(page)}
@@ -80,6 +83,7 @@ function customerSeoAssets(): Plugin {
         }
         this.emitFile({ type: 'asset', fileName: filename, source: readFileSync(source, 'utf8') });
       }
+      this.emitFile({ type: 'asset', fileName: 'social-card.webp', source: readFileSync(socialCardSource) });
     },
 
     closeBundle() {
