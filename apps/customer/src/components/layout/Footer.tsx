@@ -53,6 +53,10 @@ export function Footer() {
         <div><h3>Store</h3><Link to="/">Home</Link><Link to="/cart">Cart</Link><Link to="/terms">Terms</Link><Link to="/privacy">Privacy</Link>{validPhone && <a href={`tel:${phone}`}>Call support</a>}{validEmail && <a href={`mailto:${email}`}>Email support</a>}{settings?.supportHours && <small>{settings.supportHours}</small>}</div>
       </nav>
     </div>
-    <div className="footer-bottom"><p>© {new Date().getFullYear()} {storeName}</p><p>Cash on Delivery · Secure website checkout</p></div>
+    <div className="footer-bottom">
+      <p>© {new Date().getFullYear()} {storeName}</p>
+      <p className="footer-developer">Developed by <a href="https://www.mohitkumar2007.in" target="_blank" rel="noopener noreferrer">Mohit Kumar A</a></p>
+      <p>Cash on Delivery · Secure website checkout</p>
+    </div>
   </footer>;
 }
